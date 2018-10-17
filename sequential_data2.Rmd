@@ -1,0 +1,364 @@
+---
+title: "Capstone Project"
+author: "Ji-Eun Park"
+date: "5/17/2018"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(irlba)
+library(splatter)
+library(scater)
+library(clusterSim)
+library(SingleCellExperiment)
+library(clusterExperiment)
+library(readr)
+```
+
+
+```{r}
+dat2 <- read_rds('/Users/jieun/Desktop/CapstoneProject/datasets/kolodziejczyk.rds')
+dat2 <- dat2@assays$data$counts
+dat2 <- as.matrix(dat2)
+dat2 <- na.omit(dat2)
+dat2 <- dat2[rowSums(dat2)>0,]
+```
+
+## Parameter Estimate
+```{r}
+params_2 <- splatEstimate(dat2) # use the data to generate parameters
+pc <- c(2,5,10,20,50) # Try various numbers for PC = (2,5,10,20,50)
+simnum <- 3 # number of simulations
+ks <- 2:20
+```
+
+## Simulation
+```{r}
+sim_groups_2 <- lapply(1:simnum, function(i) splatSimulate(params_2,group.prob = c(0.3,0.3,0.4), method = "groups",verbose = FALSE,de.facLoc=.25, de.facScale=1,seed=i)) #3 simulated data
+
+sim_norm_2 <- lapply(sim_groups_2,normalise) #normalise simulated data
+
+filtered_counts_2 <- lapply(sim_norm_2, function(sim) sim[rowSums(logcounts(sim))>0,]) #sort out rows that are not all 0 logcounts
+
+sim_SCE_2 <- lapply(filtered_counts_2, function(sim) runPCA(sim, ncomponents = 50, method = "irlba", ntop = 1000)) # compute PCA
+
+# (Non-sequential) clustering with kmeans and PAM with k from 2 to 20.
+# Take only number of components of interest (2,5,10,20,50)
+clust_res_2 <- lapply(sim_SCE_2, function(sim) clusterMany(sim,ks=2:20,alphas=0.1,betas=0.8,minSizes=1,
+            clusterFunction=c("kmeans","pam"), sequential=FALSE,subsample=FALSE,
+                  reduceMethod="PCA",nReducedDims=c(2,5,10,20,50),verbose=TRUE)) 
+
+
+# (Sequential) clustering with kmeans and PAM with k from 2 to 20.
+# Take only number of components of interest (2,5,10,20,50)
+clust_res_seq_2 <- lapply(sim_SCE_2, function(sim) clusterMany(sim,ks=2:20,alphas=0.1,betas=0.8,minSizes=1,
+            clusterFunction=c("kmeans","pam"), sequential=TRUE,subsample=FALSE,
+                  reduceMethod="PCA",nReducedDims=c(2,5,10,20,50),verbose=TRUE))
+
+# With ClusterExperiment object generate cluster matrix showing the clustered group names of each cell(row)
+clust_res_mat_2 <- lapply(clust_res_2,function(sim) clusterMatrix(sim))
+clust_res_seq_mat_2 <- lapply(clust_res_seq_2,function(sim) clusterMatrix(sim))
+
+# For sequential clustering methods, generate an list of empty matrices   
+clust_res_mat_seq_NA_2 <- list("1"=matrix(nrow=nrow(clust_res_seq_mat_2[[1]]),ncol=ncol(clust_res_seq_mat_2[[1]])),"2"=matrix(nrow=nrow(clust_res_seq_mat_2[[2]]),ncol=ncol(clust_res_seq_mat_2[[2]])),"3"=matrix(nrow=nrow(clust_res_seq_mat_2[[3]]),ncol=ncol(clust_res_seq_mat_2[[3]])))
+
+# Change group -1 to NA
+for (a in 1:simnum) {
+  for (b in 1:nrow(clust_res_seq_mat_2[[1]])) {
+    for (c in 1:ncol(clust_res_seq_mat_2[[1]])) {
+      clust_res_mat_seq_NA_2[[a]][b,c] <- ifelse(clust_res_seq_mat_2[[a]][b,c]=="-1",NA,clust_res_seq_mat_2[[a]][b,c])
+    }
+  }
+}
+
+# assign colnames to new list of matrices
+for (i in 1:simnum) {
+  colnames(clust_res_mat_seq_NA_2[[i]]) <- colnames(clust_res_seq_mat_2[[i]])
+}
+
+# if a column is all NA change everything is Group1
+clust_res_mat_NA_fixed_2 <- lapply(clust_res_mat_seq_NA_2, function(x) {
+  idx <- which(colSums(is.na(x)) == NROW(x))
+  x[,idx] <- 1
+  return(x)
+})
+
+# divide the matrices in list to kmeans matrices and pam matrices
+kmenasMat_2 <- lapply(clust_res_mat_2, function(sim) sim[,1:95])
+pamMat_2 <- lapply(clust_res_mat_2, function(sim) sim[,96:190])
+
+kmeansMat2_2 <- lapply(clust_res_mat_NA_fixed_2, function(sim) sim[,1:95]) 
+pamMat2_2 <- lapply(clust_res_mat_NA_fixed_2, function(sim) sim[,96:190])
+
+ks=2:20
+```
+
+## Clustering
+### Non-sequential Kmeans
+```{r}
+# kmeans for each pc regardless of k
+kmeans_by_pc_2 <- lapply(1:length(pc), function (i) {
+  lapply(1:simnum,function (j) {
+    lapply(1:length(ks), function (s) {
+      col_num <- 5*(s-1)+i
+      comparing.Partitions(kmenasMat_2[[j]][,col_num],sim_norm_2[[j]]$Group)
+    })
+  })
+})
+
+avg_kmean_by_pc_2 <- lapply(1:length(pc), function(i) {
+    lapply(1:simnum,function (j) {
+      mean(unlist(kmeans_by_pc_2[[i]][[j]]))
+    })
+})
+
+avg_kmean_by_pc_2 <- lapply(1:length(pc), function(i){
+  mean(unlist(avg_kmean_by_pc_2[[i]]))
+})
+
+avg_kmean_by_pc_2 <- unlist(avg_kmean_by_pc_2)
+```
+
+### Non-sequential PAM
+```{r}
+# pam for each pc regardless of k
+pam_by_pc_2 <- lapply(1:length(pc), function (i) {
+  lapply(1:simnum,function (j) {
+    lapply(1:length(ks), function (s) {
+      col_num <- 5*(s-1)+i
+      comparing.Partitions(pamMat_2[[j]][,col_num],sim_norm_2[[j]]$Group)
+    })
+  })
+})
+
+avg_pam_by_pc_2 <- lapply(1:length(pc), function(i) {
+    lapply(1:simnum,function (j) {
+      mean(unlist(pam_by_pc_2[[i]][[j]]))
+    })
+})
+
+avg_pam_by_pc_2 <- lapply(1:length(pc), function(i){
+  mean(unlist(avg_pam_by_pc_2[[i]]))
+})
+
+# Unlist for plotting
+avg_pam_by_pc_2 <- unlist(avg_pam_by_pc_2)
+```
+
+### Sequantial Kmeans
+```{r}
+# kmeans for each pc regardless of k
+kmeans_by_pc2_2 <- lapply(1:length(pc), function (i) {
+  lapply(1:simnum,function (j) {
+    lapply(1:length(ks), function (s) {
+      col_num <- 5*(s-1)+i
+      comparing.Partitions(kmeansMat2_2[[j]][,col_num],sim_norm_2[[j]]$Group)
+    })
+  })
+})
+
+avg_kmean_by_pc2_2 <- lapply(1:length(pc), function(i) {
+    lapply(1:simnum,function (j) {
+      mean(unlist(kmeans_by_pc2_2[[i]][[j]]))
+    })
+})
+
+avg_kmean_by_pc2_2 <- lapply(1:length(pc), function(i){
+  mean(unlist(avg_kmean_by_pc2_2[[i]]))
+})
+
+avg_kmean_by_pc2_2 <- unlist(avg_kmean_by_pc2_2)
+```
+
+### Sequential PAM
+```{r}
+pam_by_pc2_2 <- lapply(1:length(pc), function (i) {
+  lapply(1:simnum,function (j) {
+    lapply(1:length(ks), function (s) {
+      col_num <- 5*(s-1)+i
+      comparing.Partitions(pamMat2_2[[j]][,col_num],sim_norm_2[[j]]$Group)
+    })
+  })
+})
+
+avg_pam_by_pc2_2 <- lapply(1:length(pc), function(i) {
+    lapply(1:simnum,function (j) {
+      mean(unlist(pam_by_pc2_2[[i]][[j]]))
+    })
+})
+
+avg_pam_by_pc2_2 <- lapply(1:length(pc), function(i){
+  mean(unlist(avg_pam_by_pc2_2[[i]]))
+})
+
+# Unlist for plotting
+avg_pam_by_pc2_2 <- unlist(avg_pam_by_pc2_2)
+```
+
+## Plots for Average Rand Index(Y) for each number of Component(X) 
+### Non-Sequential
+```{r}
+# Make a dataframe including all Indexes
+avg_ari_2 <- data.frame(c(rep("kmeans",length(pc)),rep("pam",length(pc))),rep(pc,2),c(avg_kmean_by_pc_2,avg_pam_by_pc_2))
+
+colnames(avg_ari_2) <- c("method","pc","index")
+
+# Plot for AARI
+ggplot(avg_ari_2,aes(x=pc,y=index,group=method,col=method)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw()
+```
+
+### Sequential
+```{r}
+# Make a dataframe including all Indexes
+avg_ari2_2 <- data.frame(c(rep("kmeans",length(pc)),rep("pam",length(pc))),rep(pc,2),c(avg_kmean_by_pc2_2,avg_pam_by_pc2_2))
+
+colnames(avg_ari2_2) <- c("method","pc","index")
+
+# Plot for AARI
+ggplot(avg_ari2_2,aes(x=pc,y=index,group=method,col=method)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw()
+```
+
+## Clustering result (for each k, PC fixed to 5)
+### Non-sequential Kmeans
+```{r}
+## With PC=5
+# kmeans by regardless of pc
+
+kmeans_by_k3_2 <- lapply(1:length(ks), function (i) {
+  lapply(1:simnum,function (j) {
+    lapply(1:length(pc), function (s) {
+      col_num <- 5*i-3
+      comparing.Partitions(kmenasMat_2[[j]][,col_num],sim_norm_2[[j]]$Group)
+    })
+  })
+})
+
+# Get the average for each PCs
+avg_kmeans_by_k3_2 <- lapply(1:length(ks), function(i) {
+    lapply(1:simnum,function (j) {
+  mean(unlist(kmeans_by_k3_2[[i]][[j]]))
+    })
+})
+
+avg_kmeans_by_k3_2 <- lapply(1:length(ks), function(i) {
+  mean(unlist(avg_kmeans_by_k3_2[[i]]))
+})
+
+avg_kmeans_by_k3_2 <- unlist(avg_kmeans_by_k3_2)
+```
+
+### Non-sequential PAM
+```{r}
+# kmeans regardless of pc
+pam_by_k3_2 <- lapply(1:length(ks), function (i) {
+  lapply(1:simnum,function (j) {
+    lapply(1:length(pc), function (s) {
+      col_num <- 5*i-3
+      comparing.Partitions(pamMat_2[[j]][,col_num],sim_norm_2[[j]]$Group)
+    })
+  })
+})
+
+# Get the average for each PCs
+avg_pam_by_k3_2 <- lapply(1:length(ks), function(i) {
+  lapply(1:length(simnum), function (j){
+      mean(unlist(pam_by_k3_2[[i]][[j]]))
+  })
+})
+
+avg_pam_by_k3_2 <- lapply(1:length(ks), function(i) {
+      mean(unlist(avg_pam_by_k3_2[[i]]))
+})
+
+# Unlist for plotting
+avg_pam_by_k3_2 <- unlist(avg_pam_by_k3_2)
+```
+
+### Sequential Kmeans
+```{r}
+kmeans_by_k4_2 <- lapply(1:length(ks), function (i) {
+  lapply(1:simnum,function (j) {
+    lapply(1:length(pc), function (s) {
+      col_num <- 5*i-3
+      comparing.Partitions(kmeansMat2_2[[j]][,col_num],sim_norm_2[[j]]$Group)
+    })
+  })
+})
+
+# Get the average for each PCs
+avg_kmeans_by_k4_2 <- lapply(1:length(ks), function(i) {
+    lapply(1:simnum,function (j) {
+  mean(unlist(kmeans_by_k4_2[[i]][[j]]))
+    })
+})
+
+avg_kmeans_by_k4_2 <- lapply(1:length(ks), function(i) {
+  mean(unlist(avg_kmeans_by_k4_2[[i]]))
+})
+
+avg_kmeans_by_k4_2 <- unlist(avg_kmeans_by_k4_2)
+```
+
+### Sequential PAM
+```{r}
+pam_by_k4_2 <- lapply(1:length(ks), function (i) {
+  lapply(1:simnum,function (j) {
+    lapply(1:length(pc), function (s) {
+      col_num <- 5*i-3
+      comparing.Partitions(pamMat2_2[[j]][,col_num],sim_norm_2[[j]]$Group)
+    })
+  })
+})
+
+# Get the average for each PCs
+avg_pam_by_k4_2 <- lapply(1:length(ks), function(i) {
+  lapply(1:length(simnum), function (j){
+      mean(unlist(pam_by_k4_2[[i]][[j]]))
+  })
+})
+
+avg_pam_by_k4_2 <- lapply(1:length(ks), function(i) {
+      mean(unlist(avg_pam_by_k4_2[[i]]))
+})
+
+# Unlist for plotting
+avg_pam_by_k4_2 <- unlist(avg_pam_by_k4_2)
+```
+
+## Plots for Average Rand Index(Y) for each k (X)
+### Non-Sequential
+```{r}
+# Make a dataframe including all Indexes
+avg_ari3_2 <- data.frame(c(rep("kmeans",length(ks)),rep("pam",length(ks))),rep(ks,2),c(avg_kmeans_by_k3_2,avg_pam_by_k3_2))
+
+colnames(avg_ari3_2) <- c("method","K","index")
+
+# Plot for AARI
+ggplot(avg_ari3_2,aes(x=K,y=index,group=method,col=method)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw()
+```
+
+### Sequential
+```{r}
+avg_ari4_2 <- data.frame(c(rep("kmeans",length(ks)),rep("pam",length(ks))),rep(ks,2),c(avg_kmeans_by_k4_2,avg_pam_by_k4_2))
+
+colnames(avg_ari4_2) <- c("method","K","index")
+
+# Plot for AARI
+ggplot(avg_ari4_2,aes(x=K,y=index,group=method,col=method)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw()
+```
+
+```{r include=FALSE}
+save(avg_ari_2,avg_ari2_2,avg_ari3_2,avg_ari4_2, file="/Users/jieun/Desktop/CapstoneProject/FinalScripts/data2results.Rdata")
+```
+ 

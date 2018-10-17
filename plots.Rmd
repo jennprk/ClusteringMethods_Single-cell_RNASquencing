@@ -1,0 +1,164 @@
+---
+title: "Plots"
+author: "Ji-Eun Park"
+date: "6/25/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)
+library(tidyverse)
+library(scater)
+```
+
+```{r}
+load("/Users/jieun/Desktop/CapstoneProject/FinalScripts/data1results.Rdata")
+load("/Users/jieun/Desktop/CapstoneProject/FinalScripts/data2results.Rdata")
+load("/Users/jieun/Desktop/CapstoneProject/FinalScripts/data3results.Rdata")
+```
+
+```{r}
+data1pc <- data.frame(rbind(avg_ari,avg_ari2),methodnew=c(rep("kmeans(non-sequential)",5),rep("pam(non-sequential)",5),rep("kmeans(sequential)",5),rep("pam(sequential)",5)))
+
+data1pc <- data1pc %>%
+  select(-method) %>%
+  dplyr::mutate(seq=c(rep("non-seq",10),rep("seq",10)))
+
+data1k <- data.frame(rbind(avg_ari3,avg_ari4),methodnew=c(rep("kmeans(non-sequential)",19),rep("pam(non-sequential)",19),rep("kmeans(sequential)",19),rep("pam(sequential)",19)))
+
+data1k <- data1k %>%
+  select(-method) %>%
+  dplyr::mutate(seq=c(rep("non-seq",38),rep("seq",38)))
+
+```
+
+```{r}
+# all in one
+ggplot(data1pc,aes(x=pc,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  labs(title="Data 1: Average Rand Index by number of Components")
+
+# grid by sequential or not
+ggplot(data1pc,aes(x=pc,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  facet_grid(~seq) +
+  labs(title="Data 1: Average Rand Index by number of Components (original/sequential)")
+
+# all in one
+ggplot(data1k,aes(x=K,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  labs(title="Data 1: Average Rand Index by number of centroids (K)")
+
+# grid by sequential or not
+ggplot(data1k,aes(x=K,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  facet_grid(~seq) +
+  labs(title="Data 1: Average Rand Index by number of centroids (K) (original/sequential)")
+```
+
+```{r}
+
+df1 <- data.frame(reducedDim(sim_SCE[[1]])[,1:2],groups=sim_groups[[1]]$Group,kmeans=as.factor(kmenasMat[[1]][,6]),pam=as.factor(pamMat[[1]][,6]))
+
+ggplot(df1,aes(x=PC1,y=PC2,color=groups)) +
+  geom_point()
+
+ggplot(df1,aes(x=PC1,y=PC2,color=kmeans)) +
+  geom_point()
+
+ggplot(df1,aes(x=PC1,y=PC2,color=pam)) +
+  geom_point()
+
+```
+
+
+```{r}
+data2pc <- data.frame(rbind(avg_ari_2,avg_ari2_2),methodnew=c(rep("kmeans(non-sequential)",5),rep("pam(non-sequential)",5),rep("kmeans(sequential)",5),rep("pam(sequential)",5)))
+
+data2pc <- data2pc %>%
+  select(-method) %>%
+  dplyr::mutate(seq=c(rep("non-seq",10),rep("seq",10)))
+
+data2k <- data.frame(rbind(avg_ari3_2,avg_ari4_2),methodnew=c(rep("kmeans(non-sequential)",19),rep("pam(non-sequential)",19),rep("kmeans(sequential)",19),rep("pam(sequential)",19)))
+
+data2k <- data2k %>%
+  select(-method) %>%
+  dplyr::mutate(seq=c(rep("non-seq",38),rep("seq",38)))
+```
+
+```{r}
+# all in one
+ggplot(data2pc,aes(x=pc,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  labs(title="Data 2: Average Rand Index by number of Components")
+
+# grid by sequential or not
+ggplot(data2pc,aes(x=pc,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  facet_grid(~seq) +
+  labs(title="Data 2: Average Rand Index by number of Components (original/sequential)")
+
+
+# all in one
+ggplot(data2k,aes(x=K,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  labs(title="Data 2: Average Rand Index by number of centroids (K)")
+
+
+# grid by sequential or not
+ggplot(data2k,aes(x=K,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  facet_grid(~seq) +
+  labs(title="Data 2: Average Rand Index by number of centroids (K) (original/sequential)")
+```
+
+```{r}
+data3pc <- data.frame(rbind(avg_ari_3,avg_ari2_3),methodnew=c(rep("kmeans(non-sequential)",5),rep("pam(non-sequential)",5),rep("kmeans(sequential)",5),rep("pam(sequential)",5)))
+
+data3pc <- data3pc %>%
+  select(-method) %>%
+  dplyr::mutate(seq=c(rep("non-seq",10),rep("seq",10)))
+
+data3k <- data.frame(rbind(avg_ari3_3,avg_ari4_3),methodnew=c(rep("kmeans(non-sequential)",19),rep("pam(non-sequential)",19),rep("kmeans(sequential)",19),rep("pam(sequential)",19)))
+
+data3k <- data3k %>%
+  select(-method) %>%
+  dplyr::mutate(seq=c(rep("non-seq",38),rep("seq",38)))
+```
+
+```{r}
+# all in one
+ggplot(data3pc,aes(x=pc,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  labs(title="Data 3: Average Rand Index by number of components")
+
+# grid by sequential or not
+ggplot(data3pc,aes(x=pc,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  facet_grid(~seq) +
+  labs(title="Data 3: Average Rand Index by number of components (original/sequential)")
+
+# all in one
+ggplot(data3k,aes(x=K,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  labs(title="Data 3: Average Rand Index by number of centroids (K)")
+
+# grid by sequential or not
+ggplot(data3k,aes(x=K,y=index,group=methodnew,col=methodnew)) +
+  geom_smooth(stat = "identity", position = "identity") +
+  theme_bw() +
+  facet_grid(~seq) +
+  labs(title="Data 3: Average Rand Index by number of centroids (K) (original/sequential)")
+```
