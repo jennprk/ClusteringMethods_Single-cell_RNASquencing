@@ -2,7 +2,7 @@
 
 ##### By Ji-Eun Park, Yitong Wang, Davide Risso
 
-#### Table of Contents
+## Table of Contents
 [1. Introduction](#Introduction)
 
 [2. Results](#Results)
