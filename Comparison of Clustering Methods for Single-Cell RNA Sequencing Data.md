@@ -28,7 +28,7 @@ There were three simulated datasets using the first actual dataset from the stud
 
 
 
-The second dataset was also simulated into three different simulation datasets and then the same process was done (Simulation 2). Similar to the results of the simulation of the first dataset**,** clustering works better K-means algorithm works consistently better in general given a sequence of different number of principal component (figure 2 left panel). However, it also shows that when the correct number of principal components and the number of true clusters were selected, the average Rand Index calculated by the number of clusters is higher for PAM (figure 2 right panel). This is inconsistent to the result of simulation 1, where K-means worked better than PAM. In addition, the sequential method seems to be noisy.
+The second dataset was also simulated into three different simulation datasets and then the same process was done (Simulation 2). Similar to the results of the simulation of the first dataset, clustering works better K-means algorithm works consistently better in general given a sequence of different number of principal component (figure 2 left panel). However, it also shows that when the correct number of principal components and the number of true clusters were selected, the average Rand Index calculated by the number of clusters is higher for PAM (figure 2 right panel). This is inconsistent to the result of simulation 1, where K-means worked better than PAM. In addition, the sequential method seems to be noisy.
 
 ![Picture2](https://ws4.sinaimg.cn/large/006tNbRwly1fwc5txjwz7j30r307fab8.jpg)
 
