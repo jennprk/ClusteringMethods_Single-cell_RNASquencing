@@ -124,7 +124,7 @@ As for our dataset, firstly, we normalized the simulated data and then logcount 
 
 We use PCA as our dimensionality reduction methods and it is applied to p63-HBC-diff, Li and Patel dataset.
 
-**PCA**: According to《An Introduction to Statistical Learning》, "principal components analysis (PCA) is a technique for reducing the dimension of a (n × p) data matrix 'X'. The first principal component direction of the data is that along which the observations vary the most.” and “Principal component analysis (PCA) refers to the process by which principal components are computed, and the subsequent use of these components in understanding the data. PCA is an unsupervised approach, since it involves only a set of features $X_{1}$ , $X_{2}$, . . . , $X_{p}$, and no associated response 'Y'. Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization" (James et al., n.d.)
+**PCA**: According to《An Introduction to Statistical Learning》, "principal components analysis (PCA) is a technique for reducing the dimension of a (n × p) data matrix 'X'. The first principal component direction of the data is that along which the observations vary the most.” and “Principal component analysis (PCA) refers to the process by which principal components are computed, and the subsequent use of these components in understanding the data. PCA is an unsupervised approach, since it involves only a set of features ![one](https://latex.codecogs.com/gif.latex?%5Cinline%20X_%7B1%7D%2CX_%7B2%7D%2C..%2CX_%7Bp%7D), and no associated response 'Y'. Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization" (James et al., n.d.)
 
 We used the function`runPCA` from the R package *scater* for the simulation study and, for computational efficiency for the real data sets. We are not sure which number of PCs are appropriate, so we specify five different values of PCs, 2,5,10,20,50.  We used the following parameters: `ncomponents = 50, method = "irlba", ntop = 1000.`
 
@@ -136,7 +136,7 @@ We use four different clustering methods to assess the dataset, K-means, PAM, se
 
 ##### **1. K-Means:** 
 
-The goal of this algorithm is to find groups in the data, with the number of groups represented by the variable 'K'. The algorithm works iteratively to assign each data point to one of 'K' groups based on the features that are provided. Data points are clustered based on feature similarity(Trevino, 2018). Given a set of observations X = {X1, X2,..., Xn}, where each observation is a d-dimensional real vector, k-means clustering aims to partition the n observations into k (<= n) sets S = {S1, S2, …, Sk} so as to minimize the within-cluster sum of squares (WCSS) (i.e. variance). Formally, the objective is to find:         
+The goal of this algorithm is to find groups in the data, with the number of groups represented by the variable 'K'. The algorithm works iteratively to assign each data point to one of 'K' groups based on the features that are provided. Data points are clustered based on feature similarity(Trevino, 2018). Given a set of observations ![two](https://latex.codecogs.com/gif.latex?%5Cinline%20X%20%3D%5C%7B%20X_%7B1%7D%2CX_%7B2%7D%2C..%2CX_%7Bn%7D%5C%7D), where each observation is a d-dimensional real vector, k-means clustering aims to partition the n observations into ![kleqn](https://latex.codecogs.com/gif.latex?%5Cinline%20k%20%5Cleq%20n) sets ![three](https://latex.codecogs.com/gif.latex?%5Cinline%20S%20%3D%20%5C%7B%20S_%7B1%7D%2C%20S_%7B2%7D%2C..%20%2CS_%7Bk%7D%5C%7D) so as to minimize the within-cluster sum of squares (WCSS) (i.e. variance). Formally, the objective is to find:         
 
 <p align="center">
   <img src="https://ws3.sinaimg.cn/large/006tNbRwly1fwc5xh1ayhj30cf03c74h.jpg">
@@ -145,7 +145,7 @@ The goal of this algorithm is to find groups in the data, with the number of gro
 
 ##### **2. PAM:** 
 
-PAM stands for “partition around medoids”. The algorithm is intended to find a sequence of objects called medoids that are centrally located in clusters. Objects that are tentatively defined as medoids are placed into a set 'S' of selected objects. If 'O' is the set of objects that the set 'U = O − S' is the set of unselected objects. The goal of the algorithm is to minimize the average dissimilarity of objects to their closest selected object. Equivalently, we can minimize the sum of the dissimilarities between object and their closest selected object (Cs.umb.edu, 2018).​                                       
+PAM stands for “partition around medoids”. The algorithm is intended to find a sequence of objects called medoids that are centrally located in clusters. Objects that are tentatively defined as medoids are placed into a set 'S' of selected objects. If 'O' is the set of objects that the set ![four](https://latex.codecogs.com/gif.latex?%5Cinline%20U%20%3D%20O%20-%20S) is the set of unselected objects. The goal of the algorithm is to minimize the average dissimilarity of objects to their closest selected object. Equivalently, we can minimize the sum of the dissimilarities between object and their closest selected object (Cs.umb.edu, 2018).​                                       
 
 We used the following parameters for Non-sequential K-means and PAM in `clusterMany` function: 
 
@@ -169,7 +169,7 @@ clusterMany(alphas=0.1,betas=0.8,minSizes=1, clusterFunction=c("kmeans","pam"), 
 
 In order to compare clustering results against external criteria, a measure of agreement is needed. Since we assume that each gene is assigned to only one class in the external criterion and to only one cluster, measures of agreement between two partitions can be used.(Faculty.washington.edu, 2018). We use Adjusted Rand Index instead of Rand Index. The reasons are explained below.
 
-As for Rand Index, Given a [set](https://en.wikipedia.org/wiki/Set_(mathematics)) of 'n' [elements](https://en.wikipedia.org/wiki/Element_(mathematics)), S = {o1, o2,.., on} and two[ partitions](https://en.wikipedia.org/wiki/Partition_of_a_set) of 'S' to compare, X = {X1, X2,.., Xr\}, a partition of 'S' into 'r' subsets, and Y = {Y1,Y2,..,Ys}, a partition of 'S' into 's' subsets, define the following:
+As for Rand Index, Given a [set](https://en.wikipedia.org/wiki/Set_(mathematics)) of 'n' [elements](https://en.wikipedia.org/wiki/Element_(mathematics)), ![five](https://latex.codecogs.com/gif.latex?%5Cinline%20S%20%3D%20%5C%7B%20o_%7B1%7D%2C%20o_%7B2%7D%2C%20..%20%2C%20o_%7Bn%7D%5C%7D) and two[ partitions](https://en.wikipedia.org/wiki/Partition_of_a_set) of 'S' to compare, X = {X1, X2,.., Xr\}, a partition of 'S' into 'r' subsets, and Y = {Y1,Y2,..,Ys}, a partition of 'S' into 's' subsets, define the following:
 
 - a: Number of pairs of elements that are same subset in X and in same subset in Y
 - b: Number of pairs of elements that are different subsets in X and in same subset in Y
