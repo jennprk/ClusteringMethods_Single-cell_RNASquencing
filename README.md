@@ -138,9 +138,13 @@ We use four different clustering methods to assess the dataset, K-means, PAM, se
 
 The goal of this algorithm is to find groups in the data, with the number of groups represented by the variable 'K'. The algorithm works iteratively to assign each data point to one of 'K' groups based on the features that are provided. Data points are clustered based on feature similarity(Trevino, 2018). Given a set of observations X = {X1, X2,..., Xn}, where each observation is a d-dimensional real vector, k-means clustering aims to partition the n observations into k (<= n) sets S = {S1, S2, …, Sk} so as to minimize the within-cluster sum of squares (WCSS) (i.e. variance). Formally, the objective is to find:         
 
+
+
 <p align="center”>
 <img src = ‘https://ws3.sinaimg.cn/large/006tNbRwly1fwc5xh1ayhj30cf03c74h.jpg'>
 <p>
+
+
 
 ##### **2. PAM:** 
 
