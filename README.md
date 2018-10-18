@@ -180,7 +180,9 @@ As for Rand Index, Given a [set](https://en.wikipedia.org/wiki/Set_(mathematics)
 
 The Rand index, R, is:
 
-![image-20181017222328368](https://ws4.sinaimg.cn/large/006tNbRwly1fwc5xtf0tmj306802ga9w.jpg)
+<p align="center">
+  <img src="https://ws4.sinaimg.cn/large/006tNbRwly1fwc5xtf0tmj306802ga9w.jpg">
+</p>
 
 Intuitively, `a+b` can be considered as the number of agreements between X and Y and `c+d` as
 the number of disagreements between X and Y.
@@ -191,7 +193,9 @@ A problem with the Rand index is that the expected value of the Rand index of tw
 
 Adjusted Rand Index is the corrected-for-chance version of the Rand index.
 
-![Picture5](https://ws4.sinaimg.cn/large/006tNbRwly1fwc5svkke0j30jw05lq3j.jpg)
+<p align="center">
+  <img src="https://ws4.sinaimg.cn/large/006tNbRwly1fwc5svkke0j30jw05lq3j.jpg">
+</p>
 
 where n_ij, a_i, b_i are values from the contingency table.
 
