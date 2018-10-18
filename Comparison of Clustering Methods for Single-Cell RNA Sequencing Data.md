@@ -127,7 +127,7 @@ We use four different clustering methods to assess the dataset, K-means, PAM, se
 
 ##### **1. K-Means:** 
 
-The goal of this algorithm is to find groups in the data, with the number of groups represented by the variable 'K'. The algorithm works iteratively to assign each data point to one of 'K' groups based on the features that are provided. Data points are clustered based on feature similarity(Trevino, 2018). Given a set of observations X = {X_1, X_2,..., X_n}, where each observation is a d-dimensional real vector, k-means clustering aims to partition the n observations into $k\: (\le n)$ sets S = {S_1, S_2, …, S_k} so as to minimize the within-cluster sum of squares (WCSS) (i.e. variance). Formally, the objective is to find:         
+The goal of this algorithm is to find groups in the data, with the number of groups represented by the variable 'K'. The algorithm works iteratively to assign each data point to one of 'K' groups based on the features that are provided. Data points are clustered based on feature similarity(Trevino, 2018). Given a set of observations X = {X1, X2,..., Xn}, where each observation is a d-dimensional real vector, k-means clustering aims to partition the n observations into k (<= n) sets S = {S1, S2, …, Sk} so as to minimize the within-cluster sum of squares (WCSS) (i.e. variance). Formally, the objective is to find:         
 
 ![image-20181017222307536](https://ws3.sinaimg.cn/large/006tNbRwly1fwc5xh1ayhj30cf03c74h.jpg)
 
@@ -157,7 +157,7 @@ clusterMany(alphas=0.1,betas=0.8,minSizes=1, clusterFunction=c("kmeans","pam"), 
 
 In order to compare clustering results against external criteria, a measure of agreement is needed. Since we assume that each gene is assigned to only one class in the external criterion and to only one cluster, measures of agreement between two partitions can be used.(Faculty.washington.edu, 2018). We use Adjusted Rand Index instead of Rand Index. The reasons are explained below.
 
-As for Rand Index, Given a [set](https://en.wikipedia.org/wiki/Set_(mathematics)) of 'n' [elements](https://en.wikipedia.org/wiki/Element_(mathematics)), S = {$o_1$,$o_2$,..,$o_n$} and two[ partitions](https://en.wikipedia.org/wiki/Partition_of_a_set) of $S$ to compare, $X = \{X_1,X_2,..,X_r\}$, a partition of 'S' into 'r' subsets, and Y = {$Y_1$,$Y_2$,..,$Y_s$}, a partition of 'S' into 's' subsets, define the following:
+As for Rand Index, Given a [set](https://en.wikipedia.org/wiki/Set_(mathematics)) of 'n' [elements](https://en.wikipedia.org/wiki/Element_(mathematics)), S = {o1, o2,.., on} and two[ partitions](https://en.wikipedia.org/wiki/Partition_of_a_set) of 'S' to compare, X = {X1, X2,.., Xr\}, a partition of 'S' into 'r' subsets, and Y = {Y1,Y2,..,Ys}, a partition of 'S' into 's' subsets, define the following:
 
 - a: Number of pairs of elements that are same subset in X and in same subset in Y
 - b: Number of pairs of elements that are different subsets in X and in same subset in Y
