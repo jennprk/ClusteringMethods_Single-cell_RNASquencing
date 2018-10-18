@@ -51,7 +51,7 @@ In general, for the simulated datasets, K-means algorithm works better than Part
 
 From this difference in the results of simulations and the real data, it can be seen that it is difficult to simulate realistic data. This might be caused by the way the simulation model is designed in the *splatter* package. The model is designed to simulate from the mean of the clusters. To be more specific, the model specifies the mean and simulates the data around the mean, which makes it better for K-means which use the centroids than PAM which means medoids. Hence, it would be difficult to figure out a method that is superior when applied to real datasets even though they are found to be working better on simulations. 
 
-Despite the limit of simulation, it is shown from the simulation that the non-sequential or traditional clustering algorithms gives the highest average random Index. However, this only true when the number of clusters ($k$) is correctly assigned. The highest average random index of sequential methods were never higher than the non-sequential methods. The advantage of sequential algorithms, however, is that the average RIs are robust to the choice of the number of clusters which coincides with the purpose of sequential algorithms. The downside of these methods is that they take approximately twice as much time compared to traditional algorithms and requires a higher computational power. 
+Despite the limit of simulation, it is shown from the simulation that the non-sequential or traditional clustering algorithms gives the highest average random Index. However, this only true when the number of clusters (k) is correctly assigned. The highest average random index of sequential methods were never higher than the non-sequential methods. The advantage of sequential algorithms, however, is that the average RIs are robust to the choice of the number of clusters which coincides with the purpose of sequential algorithms. The downside of these methods is that they take approximately twice as much time compared to traditional algorithms and requires a higher computational power. 
 
 As a conclusion of this project, there were no perfect method in our datasets. There are still many possible proposed clustering methods can be applied such as subsampling, ensemble clustering, etc. However, in order to find out the best clustering method, the primary objective would be to find a simulating algorithm that enables to generate a realistic simulation. The reason is in real life, it is more often the case that the real cluster, group, or cell types are unknown and the number of datasets with the real cluster is minimal. In order to find a consensus on the best algorithm, it is necessary that we simulate realistic data to apply and verify the optimal method.  In the future, a number of combinations of parameters can be applied to the simulation algorithm from the *splatter* package. 
 
@@ -181,7 +181,7 @@ Adjusted Rand Index is the corrected-for-chance version of the Rand index.
 
 ![Picture5](https://ws4.sinaimg.cn/large/006tNbRwly1fwc5svkke0j30jw05lq3j.jpg)
 
-where $n_{ij},\: a_i,\: b_i$ are values from the contingency table.
+where n_ij, a_i, b_i are values from the contingency table.
 
 We implemented in the `comparing.Partitions` function of the *clusterSim* package. 
 
