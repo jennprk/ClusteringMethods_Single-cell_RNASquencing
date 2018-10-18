@@ -68,7 +68,7 @@ As a conclusion of this project, there were no perfect method in our datasets. T
 
 #### Simulated datasets:
 
-*splatter* package was used to simulate our two datasets, p63-HBC-diff dataset(2017) and Li dataset(2017). The source of those two datasets can be found in [**Data Availability & Description**](#Data Availability & Description). “The core of the Splat model is a gamma-Poisson distribution used to generate a gene by cell matrix of counts. Mean expression levels for each gene are simulated from a gamma distribution and the Biological Coefficient of Variation is used to enforce a mean-variance trend before counts are simulated from a Poisson distribution. Splat also allows you to simulate expression outlier genes (genes with mean expression outside the gamma distribution) and dropout (random knock out of counts based on mean expression). Each cell is given an expected library size (simulated from a log-normal distribution) that makes it easier to match to a given dataset.” (Zappia, 2018).  The package *splatter* can be installed by 
+*splatter* package was used to simulate our two datasets, p63-HBC-diff dataset(2017) and Li dataset(2017). The source of those two datasets can be found in [**Data Availability & Description**](#DataAvailability&Description). “The core of the Splat model is a gamma-Poisson distribution used to generate a gene by cell matrix of counts. Mean expression levels for each gene are simulated from a gamma distribution and the Biological Coefficient of Variation is used to enforce a mean-variance trend before counts are simulated from a Poisson distribution. Splat also allows you to simulate expression outlier genes (genes with mean expression outside the gamma distribution) and dropout (random knock out of counts based on mean expression). Each cell is given an expected library size (simulated from a log-normal distribution) that makes it easier to match to a given dataset.” (Zappia, 2018).  The package *splatter* can be installed by 
 
 ```
 source(https://bioconductor.org/biocLite.R); 
@@ -203,7 +203,7 @@ We implemented in the `comparing.Partitions` function of the *clusterSim* packag
 
 
 
-#### **Data Availability & Description:** <a name="Data Availability & Description"></a>
+#### **Data Availability & Description:** <a name="DataAvailability&Description"></a>
 
 - p63-HBC-diff (<https://github.com/rufletch/p63-HBC-diff> )
   - Fletcher RB*, Das D*, Gadye L, Street KN, Baudhuin A, Wagner A, Cole MB, Flores Q, Choi YG, Yosef N, Purdom E, Dudoit S, Risso D, Ngai J. Deconstructing Olfactory Stem Cell Trajectories at Single Cell Resolution. Cell Stem Cell (2017)
