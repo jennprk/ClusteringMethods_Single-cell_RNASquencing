@@ -140,9 +140,9 @@ The goal of this algorithm is to find groups in the data, with the number of gro
 
 
 
-<p align="center”>
+<\p align="center”>
 <img src = ‘https://ws3.sinaimg.cn/large/006tNbRwly1fwc5xh1ayhj30cf03c74h.jpg'>
-<p>
+<\p>
 
 
 
