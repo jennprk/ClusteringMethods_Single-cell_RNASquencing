@@ -2,9 +2,14 @@
 
 ##### By Ji-Eun Park, Yitong Wang, Davide Risso
 
+#### Table of Contents
+1. [Introduction](##### Introduction)
+2. [Results](##### Results)
+3. [Discussion](##### Discussion)
+4. [Methods](##### Methods)
+5. [References](##### Reference)
 
-
-### **Introduction**
+### **Introduction** <a name="Introduction"></a>
 
 Single cell RNA sequencing(scRNA-seq) is widely used to profile the transcriptome of individual cells. From each cell, mRNA is isolated and reverse-transcribed to cDNA for high-throughput sequencing. The number of reads mapped to each gene is then used to quantify its expression in each cell. This allows biological resolution that cannot be matched by bulk RNA sequencing, at the cost of increased technical noise and data complexity. enables detailed profiling of different cell populations and can be used to reveal lineage relationships or discover new cell types.
 
@@ -16,7 +21,7 @@ There are many proposed methods in clustering methods on single cell RNA sequenc
 
 Thus, our goal is to compare the results of different clustering methods using simulations of real datasets as well as real datasets which have the actual cell types included so that we can measure how well each method works. Two simulated datasets and one real dataset were used in this project and the quality of the methods were calculated by the average rand index.
 
-### **Results**
+### **Results** <a name="Results"></a>
 
 In the project, for each simulated or real dataset, principal component analysis(PCA) was done and used to perform the two clustering methods, K-means and Partitioning Around Medoids(PAM). The methods were compared using the adjusted Rand Index (aRI) calculated with the clustering results and the simulated or the real group. The method with a higher adjusted Rand Index is considered to be a better method. Details regarding to the simulation process, PCA, and adjusted Rand Index can be found in **Methods**.
 
@@ -45,7 +50,7 @@ the average Rand Index was calculated by different number of clusters (figure 3 
 
 > **Figure 4** Plots of first and second principal component of dataset 3. Panel A is colored by the true clusters or cell types given in the real dataset. Panel B is colored by the K-means clustering results. Panel C is colored by the PAM clustering results. Colors are randomly assigned, where the same color does not mean that they are actually the same group or cell type. PAM and K-means work similarly, but does not perfectly match the real clusters result.
 
-### **Discussions**
+### **Discussions**<a name="Discussions"></a>
 
 In general, for the simulated datasets, K-means algorithm works better than Partitioning Around Medoids(PAM) algorithm when true number of principal components and the number of clusters were correctly assigned. However, it is even seen that for some cases, when the number of clusters was correct, PAM works better than K-means. Moreover, when applied to a real data, neither of the algorithms significantly dominates as a superior method no matter which number of principal component and cluster are chosen.
 
@@ -55,7 +60,7 @@ Despite the limit of simulation, it is shown from the simulation that the non-se
 
 As a conclusion of this project, there were no perfect method in our datasets. There are still many possible proposed clustering methods can be applied such as subsampling, ensemble clustering, etc. However, in order to find out the best clustering method, the primary objective would be to find a simulating algorithm that enables to generate a realistic simulation. The reason is in real life, it is more often the case that the real cluster, group, or cell types are unknown and the number of datasets with the real cluster is minimal. In order to find a consensus on the best algorithm, it is necessary that we simulate realistic data to apply and verify the optimal method.  In the future, a number of combinations of parameters can be applied to the simulation algorithm from the *splatter* package. 
 
-### **Methods**
+### **Methods**<a name="Methods"></a>
 
 #### Simulated datasets:
 
@@ -203,7 +208,7 @@ We implemented in the `comparing.Partitions` function of the *clusterSim* packag
 
 
 
-### **References**
+### **References**<a name="References"></a>
 
 1. Datta S, Nettleton D, (2014) *Statistical Analysis of Next Generation Sequencing Data,* Springer International Publishing
 2. Risso D, 2014, Cluster Analysis, lecture notes,  Division of Biostatistics PB HLTH C240D/STAT C245D, University of California, Berkeley, delivered 02/12/2014
