@@ -115,7 +115,7 @@ As for our dataset, firstly, we normalized the simulated data and then logcount 
 
 We use PCA as our dimensionality reduction methods and it is applied to p63-HBC-diff, Li and Patel dataset.
 
-**PCA**: According to《An Introduction to Statistical Learning》, "principal components analysis (PCA) is a technique for reducing the dimension of a $n × p$ data matrix 'X'. The first principal component direction of the data is that along which the observations vary the most.” and “Principal component analysis (PCA) refers to the process by which principal components are computed, and the subsequent use of these components in understanding the data. PCA is an unsupervised approach, since it involves only a set of features $X_1$, $X_2$, . . . , $X_p$, and no associated response $Y$. Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization" (James et al., n.d.)
+**PCA**: According to《An Introduction to Statistical Learning》, "principal components analysis (PCA) is a technique for reducing the dimension of a (n × p) data matrix 'X'. The first principal component direction of the data is that along which the observations vary the most.” and “Principal component analysis (PCA) refers to the process by which principal components are computed, and the subsequent use of these components in understanding the data. PCA is an unsupervised approach, since it involves only a set of features X_1 , X_2, . . . , X_p, and no associated response 'Y'. Apart from producing derived variables for use in supervised learning problems, PCA also serves as a tool for data visualization" (James et al., n.d.)
 
 We used the function`runPCA` from the R package *scater* for the simulation study and, for computational efficiency for the real data sets. We are not sure which number of PCs are appropriate, so we specify five different values of PCs, 2,5,10,20,50.  We used the following parameters: `ncomponents = 50, method = "irlba", ntop = 1000.`
 
@@ -127,7 +127,7 @@ We use four different clustering methods to assess the dataset, K-means, PAM, se
 
 ##### **1. K-Means:** 
 
-The goal of this algorithm is to find groups in the data, with the number of groups represented by the variable 'K'. The algorithm works iteratively to assign each data point to one of 'K' groups based on the features that are provided. Data points are clustered based on feature similarity(Trevino, 2018). Given a set of observations X = {$X_1$, $X_2$,..., $X_n$}, where each observation is a d-dimensional real vector, k-means clustering aims to partition the n observations into $k\: (\le n)$ sets S = {$S_1$, $S_2$, …, $S_k$} so as to minimize the within-cluster sum of squares (WCSS) (i.e. variance). Formally, the objective is to find:         
+The goal of this algorithm is to find groups in the data, with the number of groups represented by the variable 'K'. The algorithm works iteratively to assign each data point to one of 'K' groups based on the features that are provided. Data points are clustered based on feature similarity(Trevino, 2018). Given a set of observations X = {X_1, X_2,..., X_n}, where each observation is a d-dimensional real vector, k-means clustering aims to partition the n observations into $k\: (\le n)$ sets S = {S_1, S_2, …, S_k} so as to minimize the within-cluster sum of squares (WCSS) (i.e. variance). Formally, the objective is to find:         
 
 ![image-20181017222307536](https://ws3.sinaimg.cn/large/006tNbRwly1fwc5xh1ayhj30cf03c74h.jpg)
 
