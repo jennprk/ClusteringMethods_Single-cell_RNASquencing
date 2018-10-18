@@ -203,7 +203,7 @@ We implemented in the `comparing.Partitions` function of the *clusterSim* packag
 
 
 
-#### **Data Availability & Description:**
+#### **Data Availability & Description:** <a name="Data Availability & Description"></a>
 
 - p63-HBC-diff (<https://github.com/rufletch/p63-HBC-diff> )
   - Fletcher RB*, Das D*, Gadye L, Street KN, Baudhuin A, Wagner A, Cole MB, Flores Q, Choi YG, Yosef N, Purdom E, Dudoit S, Risso D, Ngai J. Deconstructing Olfactory Stem Cell Trajectories at Single Cell Resolution. Cell Stem Cell (2017)
